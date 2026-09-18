@@ -1,5 +1,5 @@
-name: vb_mobile
-description: "AURA — Beauty AI Consultant by VibeBit Studio"
+name: aura_mind
+description: "AURA Mind — AI-компаньон индустрии красоты (экосистема AURA Muza) by VibeBit Studio"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -57,17 +57,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/images/
-  fonts:
-    - family: CormorantGaramond
-      fonts:
-        - asset: assets/fonts/CormorantGaramond-VariableFont_wght.ttf
-          
-flutter_launcher_icons:
-  android: true
-  ios: false
-  image_path: "assets/images/Aura_Beauty_Splash.png"
-  min_sdk_android: 21
-  adaptive_icon_background: "#E8A0A0"
-  adaptive_icon_foreground: "assets/images/Aura_Beauty_Splash.png"
+  # assets/fonts появятся вместе с UI AURA Mind — секции assets/fonts
+  # намеренно пустые в шаблоне.
+
+# flutter_launcher_icons: настроить после того, как появится
+# брендинг/иконка AURA Mind (см. пакет flutter_launcher_icons в
+# dev_dependencies).
