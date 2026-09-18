@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1007487283755",
+    "project_id": "aurabeauty-13042",
+    "storage_bucket": "aurabeauty-13042.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007487283755:android:4bda5d3cc5c13b3473f06e",
+        "android_client_info": {
+          "package_name": "ru.vibebit.vb_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCujyWm145knxj4bLVMPkCtg5alb0tB1i8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

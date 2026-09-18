@@ -1,0 +1,73 @@
+name: vb_mobile
+description: "AURA — Beauty AI Consultant by VibeBit Studio"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # HTTP
+  dio: ^5.8.0
+
+  # Navigation
+  go_router: ^15.1.2
+
+  # State management
+  flutter_riverpod: ^2.6.1
+
+  # Local storage (сессия, токены)
+  shared_preferences: ^2.5.3
+
+  uuid: ^4.5.1 
+
+  google_fonts: ^6.2.1
+
+  speech_to_text: ^7.4.0
+
+  device_calendar: ^4.3.3
+
+  image_picker: ^1.1.2
+
+  camera: ^0.11.0+2                    # live preview с оверлеем
+
+  google_mlkit_face_detection: ^0.12.0 # детекция лица + landmarks (offline)
+
+  image: ^4.3.0                        # анализ яркости/резкости через пиксели
+
+  permission_handler: ^11.3.1          # runtime-запрос CAMERA
+
+  # Push-уведомления (CONTRACT_push_notifications_v1, Фаза 1)
+  firebase_core: ^3.15.2
+  firebase_messaging: ^15.2.10
+  flutter_local_notifications: ^18.0.1
+  url_launcher: ^6.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+  fonts:
+    - family: CormorantGaramond
+      fonts:
+        - asset: assets/fonts/CormorantGaramond-VariableFont_wght.ttf
+          
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/Aura_Beauty_Splash.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#E8A0A0"
+  adaptive_icon_foreground: "assets/images/Aura_Beauty_Splash.png"
