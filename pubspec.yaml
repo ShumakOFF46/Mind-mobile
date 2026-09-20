@@ -57,8 +57,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  # assets/fonts появятся вместе с UI AURA Mind — секции assets/fonts
-  # намеренно пустые в шаблоне.
+  fonts:
+    # Шрифт из beauty_mobile (Cormorant Garamond, лицензия OFL).
+    - family: CormorantGaramond
+      fonts:
+        - asset: assets/fonts/CormorantGaramond-VariableFont_wght.ttf
+        - asset: assets/fonts/CormorantGaramond-Italic-VariableFont_wght.ttf
+          style: italic
 
 flutter_launcher_icons:
   android: true
@@ -66,5 +71,5 @@ flutter_launcher_icons:
   remove_alpha_ios: true
   image_path: "assets/icon/app_icon.png"
   min_sdk_android: 21
-  adaptive_icon_background: "#FFFAF2"
+  adaptive_icon_background: "assets/icon/app_icon_background.png"
   adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
