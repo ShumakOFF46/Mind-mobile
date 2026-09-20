@@ -2,17 +2,28 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../core/theme.dart';
 
-/// Стартовая страница: бабочка на фирменном градиенте, затем fade на `next`.
-/// Фон и бабочка совпадают с нативным splash (Android/iOS), чтобы не было
-/// «скачка» между нативным и Flutter-кадром.
+const _bgAsset = 'assets/images/splash_bg.png';
+const _butterflyAsset = 'assets/images/butterfly_line.png';
+
+/// Цвет нативного splash (Android/iOS) — фон до первого Flutter-кадра.
+const _nativeSplashColor = Color(0xFFDDD3B9);
+
+/// Стартовая страница: большая бабочка и «AURA Mind» плавно проявляются на
+/// фирменном градиенте, затем fade на `next`. Нативный splash — только фон
+/// (без бабочки), поэтому пользователь видит один экран, а не два.
+///
+/// Анимация стартует только после `precacheImage`: иначе картинки
+/// декодируются уже во время fade, и бабочка «выскакивает» без проявления.
 class SplashPage extends StatefulWidget {
   final WidgetBuilder next;
+
+  /// Сколько держать экран после того, как fade-in закончился.
   final Duration hold;
 
   const SplashPage({
     super.key,
     required this.next,
-    this.hold = const Duration(milliseconds: 2200),
+    this.hold = const Duration(milliseconds: 1200),
   });
 
   @override
@@ -21,24 +32,46 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _ctrl = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1100),
-  )..forward();
-  late final Animation<double> _curve =
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic);
+  static const _fadeIn = Duration(milliseconds: 1600);
+
+  late final AnimationController _ctrl =
+      AnimationController(vsync: this, duration: _fadeIn);
+  late final Animation<double> _opacity =
+      CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut);
+  late final Animation<double> _scale = Tween<double>(begin: 0.94, end: 1)
+      .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
+
   Timer? _timer;
+  bool _started = false;
+  bool _bgReady = false;
 
   @override
-  void initState() {
-    super.initState();
-    _timer = Timer(widget.hold, _goNext);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_started) return;
+    _started = true;
+    _prepareAndRun();
+  }
+
+  Future<void> _prepareAndRun() async {
+    await Future.wait([
+      precacheImage(const AssetImage(_bgAsset), context),
+      precacheImage(const AssetImage(_butterflyAsset), context),
+    ]);
+    if (!mounted) return;
+    setState(() => _bgReady = true);
+    // Даём кадру с фоном отрисоваться, затем запускаем проявление.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _ctrl.forward();
+      _timer = Timer(_fadeIn + widget.hold, _goNext);
+    });
   }
 
   void _goNext() {
     if (!mounted) return;
     Navigator.of(context).pushReplacement(PageRouteBuilder<void>(
-      transitionDuration: const Duration(milliseconds: 500),
+      transitionDuration: const Duration(milliseconds: 600),
       pageBuilder: (ctx, _, _) => widget.next(ctx),
       transitionsBuilder: (_, anim, _, child) =>
           FadeTransition(opacity: anim, child: child),
@@ -56,20 +89,20 @@ class _SplashPageState extends State<SplashPage>
   Widget build(BuildContext context) {
     final w = MediaQuery.sizeOf(context).width;
     return Scaffold(
+      backgroundColor: _nativeSplashColor,
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset('assets/images/splash_bg.png', fit: BoxFit.cover),
+          if (_bgReady) Image.asset(_bgAsset, fit: BoxFit.cover),
           Center(
             child: FadeTransition(
-              opacity: _curve,
+              opacity: _opacity,
               child: ScaleTransition(
-                scale: Tween<double>(begin: 0.92, end: 1).animate(_curve),
+                scale: _scale,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.asset('assets/images/butterfly_line.png',
-                        width: w * 0.6),
+                    Image.asset(_butterflyAsset, width: w * 0.6),
                     const SizedBox(height: 28),
                     const Text(
                       'AURA Mind',
