@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../core/neu/neu_button.dart';
 import '../core/neu/neu_surface.dart';
@@ -6,7 +7,7 @@ import 'calendar_mini_button.dart';
 
 // Тексты захардкожены намеренно: это showcase (страница отсмотра), не продуктовый UI.
 
-/// Макет главного экрана чата: верхняя панель, приветствие, пузыри, ввод.
+/// Макет главного экрана чата: верхняя панель (с приветствием), окно переписки, ввод.
 class ChatMock extends StatelessWidget {
   const ChatMock({super.key});
 
@@ -17,21 +18,6 @@ class ChatMock extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _TopBar(c: c),
-        const SizedBox(height: 20),
-        Center(
-          child: NeuSurface(
-            radius: 28,
-            intensity: 0.7,
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
-            child: Text('Добро пожаловать, Анна',
-                style: TextStyle(
-                  fontFamily: 'CormorantGaramond',
-                  color: c.textDark,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                )),
-          ),
-        ),
         const SizedBox(height: 24),
         // Окно переписки — утопленное, сообщения внутри — выпуклые.
         NeuSurface(
@@ -82,48 +68,93 @@ class ChatMock extends StatelessWidget {
   }
 }
 
-/// Верхняя панель: название, ниже — крупные кнопки «Календарь»
-/// (мини-календарь по образцу 3D Sample) и «Профиль» (132 px, ×3 от прежних 44).
+/// Верхняя панель одной строкой: [Календарь] [AURA сверху + приветствие
+/// снизу] [Профиль]. Название выровнено по верху кнопок, приветствие — по низу.
+/// Кнопки 132 px; на узких экранах уменьшаются, чтобы в центре осталось
+/// не меньше `minMiddle` под название и приветствие.
 class _TopBar extends StatelessWidget {
   final AuraColorScheme c;
   const _TopBar({required this.c});
 
+  static const _gap = 10.0;
+  static const _minMiddle = 104.0;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return LayoutBuilder(builder: (context, box) {
+      final size = math.min(132.0, (box.maxWidth - 2 * _gap - _minMiddle) / 2);
+      return SizedBox(
+        height: size,
+        child: Row(
           children: [
-            Text('AURA',
-                style: TextStyle(
-                  fontFamily: 'CormorantGaramond',
-                  color: c.textDark,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 4,
-                )),
-            const SizedBox(width: 4),
-            Icon(Icons.auto_awesome, color: c.accent, size: 14),
-          ],
-        ),
-        const SizedBox(height: 22),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CalendarMiniButton(onTap: () {}),
+            CalendarMiniButton(size: size, onTap: () {}),
+            const SizedBox(width: _gap),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Text('AURA',
+                            style: TextStyle(
+                              fontFamily: 'CormorantGaramond',
+                              color: c.textDark,
+                              fontSize: 22,
+                              height: 1,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 4,
+                            )),
+                        const SizedBox(width: 4),
+                        Icon(Icons.auto_awesome, color: c.accent, size: 14),
+                      ]),
+                    ),
+                  ),
+                  NeuSurface(
+                    radius: 22,
+                    intensity: 0.6,
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        Text('Добро пожаловать,',
+                            style: TextStyle(
+                              fontFamily: 'CormorantGaramond',
+                              color: c.textSub,
+                              fontSize: 15,
+                              height: 1.1,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        Text('Анна',
+                            style: TextStyle(
+                              fontFamily: 'CormorantGaramond',
+                              color: c.textDark,
+                              fontSize: 24,
+                              height: 1.1,
+                              fontWeight: FontWeight.w600,
+                            )),
+                      ]),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: _gap),
             NeuButton(
               circle: true,
-              width: 132,
-              height: 132,
+              width: size,
+              height: size,
               intensity: 0.8,
               onTap: () {},
-              child: Icon(Icons.person_outline, color: c.textDark, size: 62),
+              child: Icon(Icons.person_outline, color: c.textDark, size: size * 0.47),
             ),
           ],
         ),
-      ],
-    );
+      );
+    });
   }
 }
 
