@@ -40,7 +40,6 @@ class ChatMock extends StatelessWidget {
               text: 'Привет! Я AURA. Расскажите про вашу кожу, и я подберу уход.',
               color: c.aiBubble,
               depth: NeuDepth.raised,
-              borderColor: c.strokePink,
             ),
           ),
         ),
@@ -128,14 +127,8 @@ class _Bubble extends StatelessWidget {
   final String text;
   final Color color;
   final NeuDepth depth;
-  final Color? borderColor;
 
-  const _Bubble({
-    required this.text,
-    required this.color,
-    required this.depth,
-    this.borderColor,
-  });
+  const _Bubble({required this.text, required this.color, required this.depth});
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +137,6 @@ class _Bubble extends StatelessWidget {
       radius: 20,
       intensity: 0.6,
       color: color,
-      borderColor: borderColor,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Text(text,
           style: TextStyle(color: context.aura.textDark, fontSize: 15, height: 1.4)),
@@ -213,7 +205,6 @@ class _NeuGalleryState extends State<NeuGallery> {
         NeuSurface(
           radius: 32,
           color: c.surface,
-          borderColor: c.strokeGreen,
           padding: const EdgeInsets.all(20),
           child: Row(
             children: [
@@ -255,7 +246,7 @@ class _NeuGalleryState extends State<NeuGallery> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            NeuSurface(radius: 24, width: 72, height: 96, color: c.aiBubble, borderColor: c.strokePink),
+            NeuSurface(radius: 24, width: 72, height: 96, color: c.aiBubble),
             const NeuSurface(depth: NeuDepth.inset, radius: 24, width: 72, height: 96),
             NeuButton(
               circle: true,
