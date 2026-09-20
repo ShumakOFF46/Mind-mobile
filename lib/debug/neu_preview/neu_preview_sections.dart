@@ -40,6 +40,7 @@ class ChatMock extends StatelessWidget {
               text: 'Привет! Я AURA. Расскажите про вашу кожу, и я подберу уход.',
               color: c.aiBubble,
               depth: NeuDepth.raised,
+              borderColor: c.strokePink,
             ),
           ),
         ),
@@ -77,8 +78,10 @@ class _TopBar extends StatelessWidget {
               width: 44,
               height: 44,
               radius: 13,
+              color: c.surface,
+              borderColor: c.strokeGreen,
               onTap: () {},
-              child: Icon(Icons.calendar_month_outlined, color: c.accent, size: 22),
+              child: Icon(Icons.calendar_month_outlined, color: c.textDark, size: 22),
             ),
             Positioned(
               top: -2,
@@ -111,8 +114,10 @@ class _TopBar extends StatelessWidget {
           circle: true,
           width: 44,
           height: 44,
+          color: c.surface,
+          borderColor: c.strokeGreen,
           onTap: () {},
-          child: Icon(Icons.person_outline, color: c.textSub, size: 24),
+          child: Icon(Icons.person_outline, color: c.textDark, size: 24),
         ),
       ],
     );
@@ -123,8 +128,14 @@ class _Bubble extends StatelessWidget {
   final String text;
   final Color color;
   final NeuDepth depth;
+  final Color? borderColor;
 
-  const _Bubble({required this.text, required this.color, required this.depth});
+  const _Bubble({
+    required this.text,
+    required this.color,
+    required this.depth,
+    this.borderColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +144,7 @@ class _Bubble extends StatelessWidget {
       radius: 20,
       intensity: 0.6,
       color: color,
+      borderColor: borderColor,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Text(text,
           style: TextStyle(color: context.aura.textDark, fontSize: 15, height: 1.4)),
@@ -156,8 +168,10 @@ class _InputMock extends StatelessWidget {
             circle: true,
             width: 36,
             height: 36,
+            color: c.aiBubble,
+            borderColor: c.strokePink,
             onTap: () {},
-            child: Icon(Icons.attach_file_rounded, color: c.textSub, size: 20),
+            child: Icon(Icons.attach_file_rounded, color: c.textDark, size: 20),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -169,8 +183,9 @@ class _InputMock extends StatelessWidget {
             width: 38,
             height: 38,
             color: c.accent,
+            borderColor: c.strokeGreen,
             onTap: () {},
-            child: const Icon(Icons.send_rounded, color: Colors.white, size: 19),
+            child: Icon(Icons.send_rounded, color: c.bg, size: 19),
           ),
         ],
       ),
@@ -199,6 +214,8 @@ class _NeuGalleryState extends State<NeuGallery> {
         const SizedBox(height: 16),
         NeuSurface(
           radius: 32,
+          color: c.surface,
+          borderColor: c.strokeGreen,
           padding: const EdgeInsets.all(20),
           child: Row(
             children: [
@@ -240,15 +257,17 @@ class _NeuGalleryState extends State<NeuGallery> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const NeuSurface(radius: 24, width: 72, height: 96),
+            NeuSurface(radius: 24, width: 72, height: 96, color: c.aiBubble, borderColor: c.strokePink),
             const NeuSurface(depth: NeuDepth.inset, radius: 24, width: 72, height: 96),
             NeuButton(
               circle: true,
               width: 72,
               height: 72,
               intensity: 1,
+              color: c.surface,
+              borderColor: c.strokeGreen,
               onTap: () => setState(() => _taps++),
-              child: Text('$_taps', style: TextStyle(color: c.accent, fontSize: 24)),
+              child: Text('$_taps', style: TextStyle(color: c.textDark, fontSize: 24)),
             ),
           ],
         ),

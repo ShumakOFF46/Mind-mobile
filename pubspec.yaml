@@ -60,6 +60,11 @@ flutter:
   # assets/fonts появятся вместе с UI AURA Mind — секции assets/fonts
   # намеренно пустые в шаблоне.
 
-# flutter_launcher_icons: настроить после того, как появится
-# брендинг/иконка AURA Mind (см. пакет flutter_launcher_icons в
-# dev_dependencies).
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icon/app_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFAF2"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"

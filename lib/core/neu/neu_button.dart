@@ -12,6 +12,7 @@ class NeuButton extends StatefulWidget {
   final bool circle;
   final Color? color;
   final double intensity;
+  final Color? borderColor;
 
   const NeuButton({
     super.key,
@@ -23,6 +24,7 @@ class NeuButton extends StatefulWidget {
     this.circle = false,
     this.color,
     this.intensity = 0.5,
+    this.borderColor,
   });
 
   @override
@@ -53,6 +55,7 @@ class _NeuButtonState extends State<NeuButton> {
         circle: widget.circle,
         color: widget.color,
         intensity: widget.intensity,
+        borderColor: widget.borderColor,
         child: Center(child: widget.child),
       ),
     );

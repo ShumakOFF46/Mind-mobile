@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/theme.dart';
 
 void main() {
   runApp(const AuraMindApp());
@@ -15,7 +16,8 @@ class AuraMindApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AURA Mind',
-      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.deepPurple),
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
       home: const Scaffold(
         body: Center(
           child: Text('AURA Mind — в разработке'),

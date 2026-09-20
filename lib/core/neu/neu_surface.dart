@@ -25,6 +25,10 @@ class NeuSurface extends StatelessWidget {
   final Color? color;
   final double intensity;
 
+  /// Контур поверхности (по палитре: savory на зелёном, blush на розовом).
+  final Color? borderColor;
+  final double borderWidth;
+
   const NeuSurface({
     super.key,
     this.child,
@@ -36,6 +40,8 @@ class NeuSurface extends StatelessWidget {
     this.height,
     this.color,
     this.intensity = 1.0,
+    this.borderColor,
+    this.borderWidth = 1.5,
   });
 
   @override
@@ -46,6 +52,9 @@ class NeuSurface extends StatelessWidget {
     final b = n.blur * intensity;
     final borderRadius = circle ? null : BorderRadius.circular(radius);
     final shape = circle ? BoxShape.circle : BoxShape.rectangle;
+    final border = borderColor == null
+        ? null
+        : Border.all(color: borderColor!, width: borderWidth);
 
     if (depth == NeuDepth.inset) {
       return CustomPaint(
@@ -65,6 +74,7 @@ class NeuSurface extends StatelessWidget {
             color: fill,
             shape: shape,
             borderRadius: borderRadius,
+            border: border,
           ),
           child: child,
         ),
@@ -81,6 +91,7 @@ class NeuSurface extends StatelessWidget {
       decoration: BoxDecoration(
         shape: shape,
         borderRadius: borderRadius,
+        border: border,
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

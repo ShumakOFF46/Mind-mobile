@@ -1,10 +1,6 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // Push-уведомления (CONTRACT_push_notifications_v1): применяет
-    // google-services.json, генерирует Firebase-конфиг для сборки.
-    // Версия плагина объявлена в android/settings.gradle.kts.
-    id("com.google.gms.google-services")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
@@ -30,8 +26,9 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "ru.vibebit.vb_mobile"
+        // Уникальный Application ID AURA Mind: отличается от beauty_mobile
+        // (ru.vibebit.vb_mobile), иначе установка заменяет то приложение.
+        applicationId = "ru.vibebit.aura_mind"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -64,4 +61,14 @@ dependencies {
 
 flutter {
     source = "../.."
+}
+
+// Push-уведомления (CONTRACT_push_notifications_v1): google-services
+// применяется только если в google-services.json есть клиент с нашим
+// applicationId. Сейчас там конфиг beauty_mobile (ru.vibebit.vb_mobile) —
+// пока в Firebase не добавлено приложение ru.vibebit.aura_mind и не
+// заменён json, плагин пропускается, чтобы сборка не падала.
+// Версия плагина объявлена в android/settings.gradle.kts.
+if (file("google-services.json").readText().contains("\"ru.vibebit.aura_mind\"")) {
+    apply(plugin = "com.google.gms.google-services")
 }
