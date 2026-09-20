@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../core/neu/neu_button.dart';
 import '../core/neu/neu_surface.dart';
 import '../core/theme.dart';
+import 'calendar_mini_button.dart';
 
 // Тексты захардкожены намеренно: это showcase (страница отсмотра), не продуктовый UI.
 
@@ -81,60 +82,45 @@ class ChatMock extends StatelessWidget {
   }
 }
 
+/// Верхняя панель: название, ниже — крупные кнопки «Календарь»
+/// (мини-календарь по образцу 3D Sample) и «Профиль» (132 px, ×3 от прежних 44).
 class _TopBar extends StatelessWidget {
   final AuraColorScheme c;
   const _TopBar({required this.c});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        Stack(
-          clipBehavior: Clip.none,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            NeuButton(
-              width: 44,
-              height: 44,
-              radius: 13,
-              color: c.surface,
-              onTap: () {},
-              child: Icon(Icons.calendar_month_outlined, color: c.textDark, size: 22),
-            ),
-            Positioned(
-              top: -2,
-              right: -2,
-              child: Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  color: Colors.redAccent,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: c.bg, width: 1.5),
-                ),
-              ),
-            ),
+            Text('AURA',
+                style: TextStyle(
+                  fontFamily: 'CormorantGaramond',
+                  color: c.textDark,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 4,
+                )),
+            const SizedBox(width: 4),
+            Icon(Icons.auto_awesome, color: c.accent, size: 14),
           ],
         ),
-        Row(children: [
-          Text('AURA',
-              style: TextStyle(
-                fontFamily: 'CormorantGaramond',
-                color: c.textDark,
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 4,
-              )),
-          const SizedBox(width: 4),
-          Icon(Icons.auto_awesome, color: c.accent, size: 14),
-        ]),
-        NeuButton(
-          circle: true,
-          width: 44,
-          height: 44,
-          color: c.surface,
-          onTap: () {},
-          child: Icon(Icons.person_outline, color: c.textDark, size: 24),
+        const SizedBox(height: 22),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CalendarMiniButton(onTap: () {}),
+            NeuButton(
+              circle: true,
+              width: 132,
+              height: 132,
+              intensity: 0.8,
+              onTap: () {},
+              child: Icon(Icons.person_outline, color: c.textDark, size: 62),
+            ),
+          ],
         ),
       ],
     );
