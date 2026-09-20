@@ -178,17 +178,17 @@ class ButtonsSection extends StatelessWidget {
       children: [
         NeuButton(
           width: 130, height: 46, radius: 23, intensity: 0.6,
-          color: c.surface, borderColor: c.strokeGreen, onTap: () {},
+          color: c.surface, onTap: () {},
           child: label('Зелёная', c.textDark),
         ),
         NeuButton(
           width: 130, height: 46, radius: 23, intensity: 0.6,
-          color: c.aiBubble, borderColor: c.strokePink, onTap: () {},
+          color: c.aiBubble, onTap: () {},
           child: label('Розовая', c.textDark),
         ),
         NeuButton(
           width: 130, height: 46, radius: 23, intensity: 0.6,
-          color: c.accent, borderColor: c.strokeGreen, onTap: () {},
+          color: c.accent, onTap: () {},
           child: label('Акцент', c.bg),
         ),
         NeuButton(

@@ -41,6 +41,9 @@ void main() {
     expect(depth(), NeuDepth.inset);
     await gesture.up();
     await tester.pump();
+    // Минимальное время «вдавленного» состояния (~140 мс) ещё не прошло.
+    expect(depth(), NeuDepth.inset);
+    await tester.pump(const Duration(milliseconds: 200));
     expect(depth(), NeuDepth.raised);
     expect(taps, 1);
   });

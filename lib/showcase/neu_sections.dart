@@ -32,26 +32,46 @@ class ChatMock extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 6, right: 60),
-            child: _Bubble(
-              text: 'Привет! Я AURA. Расскажите про вашу кожу, и я подберу уход.',
-              color: c.aiBubble,
-              depth: NeuDepth.raised,
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 6, left: 60),
-            child: _Bubble(
-              text: 'Кожа сухая, особенно зимой.',
-              color: c.userBubble,
-              depth: NeuDepth.inset,
-            ),
+        // Окно переписки — утопленное, сообщения внутри — выпуклые.
+        NeuSurface(
+          depth: NeuDepth.inset,
+          radius: 28,
+          intensity: 0.9,
+          padding: const EdgeInsets.fromLTRB(14, 18, 14, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 12, right: 44),
+                  child: _Bubble(
+                    text: 'Привет! Я AURA. Расскажите про вашу кожу, и я подберу уход.',
+                    color: c.aiBubble,
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 12, left: 44),
+                  child: _Bubble(
+                    text: 'Кожа сухая, особенно зимой.',
+                    color: c.userBubble,
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 6, right: 44),
+                  child: _Bubble(
+                    text: 'Поняла. Подберём мягкое очищение и плотный крем.',
+                    color: c.aiBubble,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
@@ -78,7 +98,6 @@ class _TopBar extends StatelessWidget {
               height: 44,
               radius: 13,
               color: c.surface,
-              borderColor: c.strokeGreen,
               onTap: () {},
               child: Icon(Icons.calendar_month_outlined, color: c.textDark, size: 22),
             ),
@@ -114,7 +133,6 @@ class _TopBar extends StatelessWidget {
           width: 44,
           height: 44,
           color: c.surface,
-          borderColor: c.strokeGreen,
           onTap: () {},
           child: Icon(Icons.person_outline, color: c.textDark, size: 24),
         ),
@@ -126,14 +144,12 @@ class _TopBar extends StatelessWidget {
 class _Bubble extends StatelessWidget {
   final String text;
   final Color color;
-  final NeuDepth depth;
 
-  const _Bubble({required this.text, required this.color, required this.depth});
+  const _Bubble({required this.text, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return NeuSurface(
-      depth: depth,
       radius: 20,
       intensity: 0.6,
       color: color,
@@ -161,7 +177,6 @@ class _InputMock extends StatelessWidget {
             width: 36,
             height: 36,
             color: c.aiBubble,
-            borderColor: c.strokePink,
             onTap: () {},
             child: Icon(Icons.attach_file_rounded, color: c.textDark, size: 20),
           ),
@@ -175,7 +190,6 @@ class _InputMock extends StatelessWidget {
             width: 38,
             height: 38,
             color: c.accent,
-            borderColor: c.strokeGreen,
             onTap: () {},
             child: Icon(Icons.send_rounded, color: c.bg, size: 19),
           ),
@@ -254,7 +268,6 @@ class _NeuGalleryState extends State<NeuGallery> {
               height: 72,
               intensity: 1,
               color: c.surface,
-              borderColor: c.strokeGreen,
               onTap: () => setState(() => _taps++),
               child: Text('$_taps', style: TextStyle(color: c.textDark, fontSize: 24)),
             ),

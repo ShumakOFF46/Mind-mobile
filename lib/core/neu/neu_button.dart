@@ -1,8 +1,18 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'neu_surface.dart';
 
-/// Кнопка на `NeuSurface`: при нажатии «вдавливается» (raised → inset).
-/// `onTap == null` — кнопка неактивна, без эффекта нажатия.
+/// Кнопка на `NeuSurface`: при нажатии «вдавливается» (raised → inset),
+/// при отпускании возвращается в выпуклую. `onTap == null` — кнопка
+/// неактивна, без эффекта нажатия.
+///
+/// Состояние нажатия берётся из `Listener` (сырые события указателя), а не
+/// из `onTapDown` жеста: у `GestureDetector` `onTapDown` приходит с задержкой
+/// или только в момент отпускания, из-за чего быстрый тап не был виден.
+/// Минимальное время «вдавленного» состояния — `_minPress`, чтобы даже
+/// мгновенный тап заметно «продавливал» кнопку.
+///
+/// Нужны явные `width`/`height` (содержимое центрируется).
 class NeuButton extends StatefulWidget {
   final VoidCallback? onTap;
   final Widget child;
@@ -32,31 +42,66 @@ class NeuButton extends StatefulWidget {
 }
 
 class _NeuButtonState extends State<NeuButton> {
-  bool _pressed = false;
+  static const _minPress = Duration(milliseconds: 140);
 
-  void _setPressed(bool v) {
-    if (widget.onTap == null || _pressed == v) return;
-    setState(() => _pressed = v);
+  bool _pressed = false;
+  DateTime? _downAt;
+  Timer? _releaseTimer;
+
+  void _onDown(PointerDownEvent _) {
+    if (widget.onTap == null) return;
+    _releaseTimer?.cancel();
+    _downAt = DateTime.now();
+    if (!_pressed) setState(() => _pressed = true);
+  }
+
+  void _onUp(PointerEvent _) {
+    if (!_pressed) return;
+    final held = DateTime.now().difference(_downAt ?? DateTime.now());
+    final rest = _minPress - held;
+    if (rest <= Duration.zero) {
+      _release();
+    } else {
+      _releaseTimer = Timer(rest, _release);
+    }
+  }
+
+  void _release() {
+    if (mounted && _pressed) setState(() => _pressed = false);
+  }
+
+  @override
+  void dispose() {
+    _releaseTimer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Listener(
       behavior: HitTestBehavior.opaque,
-      onTapDown: (_) => _setPressed(true),
-      onTapUp: (_) => _setPressed(false),
-      onTapCancel: () => _setPressed(false),
-      onTap: widget.onTap,
-      child: NeuSurface(
-        depth: _pressed ? NeuDepth.inset : NeuDepth.raised,
-        width: widget.width,
-        height: widget.height,
-        radius: widget.radius,
-        circle: widget.circle,
-        color: widget.color,
-        intensity: widget.intensity,
-        borderColor: widget.borderColor,
-        child: Center(child: widget.child),
+      onPointerDown: _onDown,
+      onPointerUp: _onUp,
+      onPointerCancel: _onUp,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: widget.onTap,
+        child: AnimatedScale(
+          scale: _pressed ? 0.97 : 1,
+          duration: const Duration(milliseconds: 90),
+          child: NeuSurface(
+            depth: _pressed ? NeuDepth.inset : NeuDepth.raised,
+            width: widget.width,
+            height: widget.height,
+            radius: widget.radius,
+            circle: widget.circle,
+            color: widget.color,
+            // Утопленное состояние чуть сильнее, чтобы нажатие читалось.
+            intensity: widget.intensity * (_pressed ? 1.25 : 1),
+            borderColor: widget.borderColor,
+            child: Center(child: widget.child),
+          ),
+        ),
       ),
     );
   }
