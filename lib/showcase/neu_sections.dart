@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../core/neu/neu_button.dart';
-import '../../core/neu/neu_surface.dart';
-import '../../core/theme.dart';
+import '../core/neu/neu_button.dart';
+import '../core/neu/neu_surface.dart';
+import '../core/theme.dart';
 
-// Тексты захардкожены намеренно: это debug-превью, не продуктовый UI.
+// Тексты захардкожены намеренно: это showcase (страница отсмотра), не продуктовый UI.
 
 /// Макет главного экрана чата: верхняя панель, приветствие, пузыри, ввод.
 class ChatMock extends StatelessWidget {
@@ -210,8 +210,6 @@ class _NeuGalleryState extends State<NeuGallery> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('Примитивы', style: TextStyle(color: c.textSub, fontSize: 13)),
-        const SizedBox(height: 16),
         NeuSurface(
           radius: 32,
           color: c.surface,
