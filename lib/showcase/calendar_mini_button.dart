@@ -42,7 +42,7 @@ class CalendarMiniButton extends StatelessWidget {
       width: size,
       height: size,
       radius: 32 * k,
-      intensity: 0.8,
+      intensity: 0.8 * k.clamp(0.7, 1.3).toDouble(),
       onTap: onTap,
       child: Padding(
         padding: EdgeInsets.all(9 * k),

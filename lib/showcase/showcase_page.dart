@@ -19,42 +19,48 @@ class ShowcasePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: c.bg,
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
-          children: [
-            Row(
+        // На планшетах держим контент в колонке ~640 px по центру.
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
               children: [
-                Text('AURA Mind',
-                    style: TextStyle(
-                      color: c.textDark,
-                      fontSize: 26,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 3,
-                    )),
-                const Spacer(),
-                Text(dark ? 'dark' : 'light',
-                    style: TextStyle(color: c.textSub, fontSize: 13)),
-                Switch(
-                  value: dark,
-                  activeColor: c.accent,
-                  onChanged: (v) =>
-                      themeMode.value = v ? ThemeMode.dark : ThemeMode.light,
+                Row(
+                  children: [
+                    Text('AURA Mind',
+                        style: TextStyle(
+                          color: c.textDark,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 3,
+                        )),
+                    const Spacer(),
+                    Text(dark ? 'dark' : 'light',
+                        style: TextStyle(color: c.textSub, fontSize: 13)),
+                    Switch(
+                      value: dark,
+                      activeColor: c.accent,
+                      onChanged: (v) =>
+                          themeMode.value = v ? ThemeMode.dark : ThemeMode.light,
+                    ),
+                  ],
                 ),
+                const SectionTitle('Палитра'),
+                const PaletteSection(),
+                const SectionTitle('Роли и контраст текста'),
+                const RolesSection(),
+                const SectionTitle('Кнопки и контуры'),
+                const ButtonsSection(),
+                const SectionTitle('Шрифты'),
+                const TypographySection(),
+                const SectionTitle('Главный экран чата (макет)'),
+                const ChatMock(),
+                const SectionTitle('3D-примитивы'),
+                const NeuGallery(),
               ],
             ),
-            const SectionTitle('Палитра'),
-            const PaletteSection(),
-            const SectionTitle('Роли и контраст текста'),
-            const RolesSection(),
-            const SectionTitle('Кнопки и контуры'),
-            const ButtonsSection(),
-            const SectionTitle('Шрифты'),
-            const TypographySection(),
-            const SectionTitle('Главный экран чата (макет)'),
-            const ChatMock(),
-            const SectionTitle('3D-примитивы'),
-            const NeuGallery(),
-          ],
+          ),
         ),
       ),
     );

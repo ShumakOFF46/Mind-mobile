@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../core/neu/neu_button.dart';
 import '../core/neu/neu_surface.dart';
@@ -70,25 +69,35 @@ class ChatMock extends StatelessWidget {
 
 /// Верхняя панель одной строкой: [Календарь] [AURA сверху + приветствие
 /// снизу] [Профиль]. Название выровнено по верху кнопок, приветствие — по низу.
-/// Кнопки 132 px; на узких экранах уменьшаются, чтобы в центре осталось
-/// не меньше `minMiddle` под название и приветствие.
+///
+/// Полностью адаптивна: размер кнопок = 30% ширины панели (в пределах
+/// [_minSize, _maxSize]), а отступы, шрифты, радиусы и глубина теней центра
+/// масштабируются тем же коэффициентом `k = size / 132`, поэтому пропорции
+/// одинаковы на маленьком телефоне, большом телефоне и планшете.
 class _TopBar extends StatelessWidget {
   final AuraColorScheme c;
   const _TopBar({required this.c});
 
-  static const _gap = 10.0;
-  static const _minMiddle = 104.0;
+  static const _baseSize = 132.0;
+  static const _minSize = 96.0;
+  static const _maxSize = 176.0;
+  static const _widthShare = 0.30;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, box) {
-      final size = math.min(132.0, (box.maxWidth - 2 * _gap - _minMiddle) / 2);
+      final size =
+          (box.maxWidth * _widthShare).clamp(_minSize, _maxSize).toDouble();
+      final k = size / _baseSize;
+      final gap = size * 0.09;
+      final depth = k.clamp(0.7, 1.3).toDouble(); // масштаб теней
+
       return SizedBox(
         height: size,
         child: Row(
           children: [
             CalendarMiniButton(size: size, onTap: () {}),
-            const SizedBox(width: _gap),
+            SizedBox(width: gap),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -103,20 +112,20 @@ class _TopBar extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'CormorantGaramond',
                               color: c.textDark,
-                              fontSize: 22,
+                              fontSize: 22 * k,
                               height: 1,
                               fontWeight: FontWeight.w600,
-                              letterSpacing: 4,
+                              letterSpacing: 4 * k,
                             )),
-                        const SizedBox(width: 4),
-                        Icon(Icons.auto_awesome, color: c.accent, size: 14),
+                        SizedBox(width: 4 * k),
+                        Icon(Icons.auto_awesome, color: c.accent, size: 14 * k),
                       ]),
                     ),
                   ),
                   NeuSurface(
-                    radius: 22,
-                    intensity: 0.6,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    radius: 22 * k,
+                    intensity: 0.6 * depth,
+                    padding: EdgeInsets.symmetric(horizontal: 10 * k, vertical: 8 * k),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -124,7 +133,7 @@ class _TopBar extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'CormorantGaramond',
                               color: c.textSub,
-                              fontSize: 15,
+                              fontSize: 15 * k,
                               height: 1.1,
                               fontWeight: FontWeight.w500,
                             )),
@@ -132,7 +141,7 @@ class _TopBar extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'CormorantGaramond',
                               color: c.textDark,
-                              fontSize: 24,
+                              fontSize: 24 * k,
                               height: 1.1,
                               fontWeight: FontWeight.w600,
                             )),
@@ -142,12 +151,12 @@ class _TopBar extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: _gap),
+            SizedBox(width: gap),
             NeuButton(
               circle: true,
               width: size,
               height: size,
-              intensity: 0.8,
+              intensity: 0.8 * depth,
               onTap: () {},
               child: Icon(Icons.person_outline, color: c.textDark, size: size * 0.47),
             ),
