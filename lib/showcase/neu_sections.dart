@@ -68,7 +68,8 @@ class ChatMock extends StatelessWidget {
 }
 
 /// Верхняя панель одной строкой: [Календарь] [AURA сверху + приветствие
-/// снизу] [Профиль]. Название выровнено по верху кнопок, приветствие — по низу.
+/// снизу] [Профиль]. Заголовок «AURA ✦ / AI Mind» стоит по центру вертикали
+/// между верхом кнопок и верхом плашки приветствия, плашка — по низу кнопок.
 ///
 /// Полностью адаптивна: размер кнопок = 30% ширины панели (в пределах
 /// [_minSize, _maxSize]), а отступы, шрифты, радиусы и глубина теней центра
@@ -82,6 +83,8 @@ class _TopBar extends StatelessWidget {
   static const _minSize = 96.0;
   static const _maxSize = 176.0;
   static const _widthShare = 0.30;
+  static const _titleSize = 22.0; // шрифт «AURA» при size = 132
+  static const _subtitleRatio = 0.75; // «AI Mind» = 0.75 × «AURA»
 
   @override
   Widget build(BuildContext context) {
@@ -101,25 +104,41 @@ class _TopBar extends StatelessWidget {
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Center(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        Text('AURA',
-                            style: TextStyle(
-                              fontFamily: 'CormorantGaramond',
-                              color: c.textDark,
-                              fontSize: 22 * k,
-                              height: 1,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 4 * k,
-                            )),
-                        SizedBox(width: 4 * k),
-                        Icon(Icons.auto_awesome, color: c.accent, size: 14 * k),
-                      ]),
+                  // Заголовок: по центру вертикали между верхом «Календаря»
+                  // и верхом плашки приветствия (всё свободное место над ней).
+                  Expanded(
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Column(mainAxisSize: MainAxisSize.min, children: [
+                          Row(mainAxisSize: MainAxisSize.min, children: [
+                            Text('AURA',
+                                style: TextStyle(
+                                  fontFamily: 'CormorantGaramond',
+                                  color: c.textDark,
+                                  fontSize: _titleSize * k,
+                                  height: 1,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 4 * k,
+                                )),
+                            SizedBox(width: 4 * k),
+                            Icon(Icons.auto_awesome, color: c.accent, size: 14 * k),
+                          ]),
+                          SizedBox(height: 3 * k),
+                          // Вторая строка — 0.75 от шрифта AURA.
+                          Text('AI Mind',
+                              style: TextStyle(
+                                fontFamily: 'CormorantGaramond',
+                                color: c.textDark,
+                                fontSize: _titleSize * _subtitleRatio * k,
+                                height: 1,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 4 * k * _subtitleRatio,
+                              )),
+                        ]),
+                      ),
                     ),
                   ),
                   NeuSurface(
